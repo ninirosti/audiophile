@@ -7,6 +7,7 @@ export default function Hero() {
         background: "#000",
         color: "#fff",
         padding: "3rem 1.5rem",
+        height: "536px",
       }}
     >
       <div
@@ -19,7 +20,6 @@ export default function Hero() {
           gap: "2rem",
         }}
       >
-        {/* LEFT: TEXT */}
         <div style={{ maxWidth: "500px" }}>
           <p style={{ opacity: 0.7, textTransform: "uppercase", letterSpacing: "2px" }}>New Product</p>
           <h2 style={{ fontSize: "2.5rem", margin: "0.5rem 0", lineHeight: 1.2 }}>
@@ -42,7 +42,7 @@ export default function Hero() {
 
         {/* RIGHT: IMAGE */}
         <div style={{ flex: "1", textAlign: "right" }}>
-          <img src={heroImg} alt="XX99 Mark II Headphones" style={{ maxWidth: "100%", height: "auto" }} />
+          <img src={heroImg} alt="XX99 Mark II Headphones" style={{ maxWidth: "450px", height: "auto" }} />
         </div>
       </div>
     </section>

@@ -1,16 +1,15 @@
 import { Link } from "react-router-dom";
-import logo from "../assets/logo.png"; // use import, not "src/..."
+import logo from "../assets/logo.png";
 
 export default function Header() {
   return (
     <header style={{ background: "#000" }}>
       <div style={{ borderBottom: "1px solid rgba(255,255,255,0.15)" }}>
-        {/* fixed height = 97px per Figma */}
         <div
           style={{
             maxWidth: "1110px",
             margin: "0 auto",
-            height: "97px", // ← exact header height
+            height: "97px",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
