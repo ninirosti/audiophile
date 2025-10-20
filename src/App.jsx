@@ -1,23 +1,21 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
-import InfoSection from "./components/InfoSection"; // 👈 import it
-import infoImg from "./assets/info.png"; // 👈 your PNG
+import Layout from "./components/Layout";
 import Home from "./pages/Home";
+import Headphones from "./pages/Headphones";
+import Speakers from "./pages/Speakers";
+import Earphones from "./pages/Earphones";
 
 export default function App() {
   return (
     <Router>
-      <Header />
       <Routes>
-        <Route path="/" element={<Home />} />
-        {/* Add product pages later */}
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path="headphones" element={<Headphones />} />
+          <Route path="speakers" element={<Speakers />} />
+          <Route path="earphones" element={<Earphones />} />
+        </Route>
       </Routes>
-
-      {/* 👇 This will appear on EVERY page */}
-      <InfoSection image={infoImg} />
-
-      <Footer />
     </Router>
   );
 }
