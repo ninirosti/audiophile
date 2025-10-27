@@ -1,50 +1,219 @@
-import { Link } from "react-router-dom";
+// src/components/Header.jsx
+import { NavLink, useNavigate } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+
+// PNGs in src/assets
+import cartIcon from "../assets/cart.png";
 import logo from "../assets/logo.png";
+import usFlag from "../assets/us.png";
+import geFlag from "../assets/ge.png";
 
 export default function Header() {
+  const navigate = useNavigate();
+
+  const [langMenuOpen, setLangMenuOpen] = useState(false);
+  const [currentFlag, setCurrentFlag] = useState(usFlag);
+  const menuRef = useRef(null);
+
+  // Restore persisted language flag
+  useEffect(() => {
+    const saved = localStorage.getItem("langFlag");
+    if (saved === "ge") setCurrentFlag(geFlag);
+    if (saved === "us") setCurrentFlag(usFlag);
+  }, []);
+
+  // Close menu on outside click or Esc
+  useEffect(() => {
+    function onDocClick(e) {
+      if (!menuRef.current) return;
+      if (langMenuOpen && !menuRef.current.contains(e.target)) {
+        setLangMenuOpen(false);
+      }
+    }
+    function onEsc(e) {
+      if (e.key === "Escape") setLangMenuOpen(false);
+    }
+    document.addEventListener("mousedown", onDocClick);
+    document.addEventListener("keydown", onEsc);
+    return () => {
+      document.removeEventListener("mousedown", onDocClick);
+      document.removeEventListener("keydown", onEsc);
+    };
+  }, [langMenuOpen]);
+
+  const toggleLangMenu = () => setLangMenuOpen((s) => !s);
+
+  const changeLang = (flagKey) => {
+    const flagMap = { us: usFlag, ge: geFlag };
+    setCurrentFlag(flagMap[flagKey]);
+    localStorage.setItem("langFlag", flagKey);
+    setLangMenuOpen(false);
+    // If later you wire up i18n, trigger language change here too.
+  };
+
+  const linkBase = {
+    color: "#fff",
+    textDecoration: "none",
+    letterSpacing: 2,
+    fontSize: 13,
+    textTransform: "uppercase",
+  };
+
+  const activeStyle = ({ isActive }) => ({
+    ...linkBase,
+    borderBottom: isActive ? "2px solid #D87D4A" : "2px solid transparent",
+    paddingBottom: 4,
+  });
+
   return (
-    <header style={{ background: "#000" }}>
-      <div style={{ borderBottom: "1px solid rgba(255,255,255,0.15)" }}>
-        <div
+    <header
+      style={{
+        backgroundColor: "#000",
+        color: "#fff",
+        padding: "1.25rem 2rem",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        position: "sticky",
+        top: 0,
+        zIndex: 100,
+      }}
+    >
+      {/* LOGO -> go home (no reload) */}
+      <button
+        onClick={() => navigate("/")}
+        aria-label="Go to homepage"
+        style={{
+          background: "transparent",
+          border: 0,
+          cursor: "pointer",
+          display: "flex",
+          alignItems: "center",
+          padding: 0,
+        }}
+      >
+        <img src={logo} alt="audiophile" style={{ height: 24 }} />
+      </button>
+
+      {/* NAV */}
+      <nav
+        style={{
+          display: "flex",
+          gap: "2rem",
+          alignItems: "center",
+        }}
+      >
+        <NavLink to="/" style={activeStyle}>
+          Home
+        </NavLink>
+        <NavLink to="/headphones" style={activeStyle}>
+          Headphones
+        </NavLink>
+        <NavLink to="/speakers" style={activeStyle}>
+          Speakers
+        </NavLink>
+        <NavLink to="/earphones" style={activeStyle}>
+          Earphones
+        </NavLink>
+      </nav>
+
+      {/* CART + FLAGS */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "1rem",
+          position: "relative",
+        }}
+        ref={menuRef}
+      >
+        {/* Cart */}
+        <button
+          onClick={() => alert("Cart clicked")}
+          aria-label="Open cart"
           style={{
-            maxWidth: "1110px",
-            margin: "0 auto",
-            height: "97px",
+            background: "transparent",
+            border: 0,
+            cursor: "pointer",
+            padding: 0,
             display: "flex",
             alignItems: "center",
-            justifyContent: "space-between",
-            gap: "24px",
           }}
         >
-          <img src={logo} alt="audiophile" style={{ height: "25px", width: "auto" }} />
+          <img src={cartIcon} alt="" style={{ height: 20 }} />
+        </button>
 
-          <nav
+        {/* Language selector */}
+        <button
+          onClick={toggleLangMenu}
+          aria-haspopup="menu"
+          aria-expanded={langMenuOpen}
+          style={{
+            background: "transparent",
+            border: "1px solid #333",
+            borderRadius: 6,
+            padding: 2,
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <img src={currentFlag} alt="Language" style={{ height: 20 }} />
+        </button>
+
+        {langMenuOpen && (
+          <div
+            role="menu"
             style={{
+              position: "absolute",
+              top: "2.4rem",
+              right: 0,
+              background: "#fff",
+              color: "#000",
+              borderRadius: 8,
+              padding: "0.5rem 0.6rem",
+              boxShadow: "0 10px 24px rgba(0,0,0,0.18)",
               display: "flex",
-              gap: "32px",
-              textTransform: "uppercase",
-              fontSize: "13px",
-              letterSpacing: "2px",
-              flex: 1,
-              justifyContent: "center",
+              flexDirection: "column",
+              gap: 8,
+              minWidth: 120,
             }}
           >
-            <Link to="/" style={{ color: "#fff", textDecoration: "none" }}>
-              Home
-            </Link>
-            <Link to="/headphones" style={{ color: "#fff", textDecoration: "none" }}>
-              Headphones
-            </Link>
-            <Link to="/speakers" style={{ color: "#fff", textDecoration: "none" }}>
-              Speakers
-            </Link>
-            <Link to="/earphones" style={{ color: "#fff", textDecoration: "none" }}>
-              Earphones
-            </Link>
-          </nav>
+            <button
+              role="menuitem"
+              onClick={() => changeLang("us")}
+              style={{
+                background: "transparent",
+                border: 0,
+                display: "flex",
+                alignItems: "center",
+                gap: 8,
+                cursor: "pointer",
+                padding: "6px 8px",
+              }}
+            >
+              <img src={usFlag} alt="" style={{ height: 16 }} />
+              ENG
+            </button>
 
-          <div style={{ fontSize: "18px", color: "#fff", lineHeight: 1 }}>🛒</div>
-        </div>
+            <button
+              role="menuitem"
+              onClick={() => changeLang("ge")}
+              style={{
+                background: "transparent",
+                border: 0,
+                display: "flex",
+                alignItems: "center",
+                gap: 8,
+                cursor: "pointer",
+                padding: "6px 8px",
+              }}
+            >
+              <img src={geFlag} alt="" style={{ height: 16 }} />
+              GEO
+            </button>
+          </div>
+        )}
       </div>
     </header>
   );

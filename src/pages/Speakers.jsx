@@ -1,12 +1,12 @@
 // src/pages/Speakers.jsx
 import ProductRow from "../components/ProductRow";
-import zx9 from "../assets/speakerspg.png";
-import zx7 from "../assets/zxspeaker.png";
+import zx9Img from "../assets/zx9.png";
+import zx7Img from "../assets/zx7.png";
 
 export default function Speakers() {
   return (
     <main>
-      {/* Top banner */}
+      {/* Page header */}
       <div
         style={{
           background: "#0E0E0E",
@@ -23,11 +23,22 @@ export default function Speakers() {
       </div>
 
       {/* ZX9 */}
-      <ProductRow badge="NEW PRODUCT" title="ZX9 SPEAKER" description="Our flagship speaker with room-filling sound, deep bass, and precise imaging—plus modern wireless connectivity." image={zx9} />
+      <ProductRow
+        badge="NEW PRODUCT"
+        title="ZX9 SPEAKER"
+        description="Upgrade to premium speakers that are phenomenally built to deliver truly remarkable sound."
+        image={zx9Img}
+        slug="zx9" // 👈 links to /product/zx9
+      />
 
-      {/* ZX7 (reversed layout) */}
-      <ProductRow title="ZX7 SPEAKER" description="Clean, effortless sound with adaptable components and a compact footprint for any living space or studio." image={zx7} reverse />
-      {/* Categories + InfoSection + Footer are rendered by Layout */}
+      {/* ZX7 */}
+      <ProductRow
+        title="ZX7 SPEAKER"
+        description="Stream high-quality sound effortlessly with versatile inputs and elegant design."
+        image={zx7Img}
+        reverse
+        slug="zx7" // 👈 links to /product/zx7
+      />
     </main>
   );
 }

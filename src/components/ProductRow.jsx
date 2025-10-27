@@ -1,11 +1,31 @@
+// src/components/ProductRow.jsx
+import { Link } from "react-router-dom";
+
 export default function ProductRow({
-  badge, // "NEW PRODUCT" (optional)
+  badge,
   title,
   description,
   image,
+  slug, // dynamic link slug (e.g. "zx9", "xx99-mark-two")
   reverse = false, // flips image/text order
-  onClick, // SEE PRODUCT handler (optional)
 }) {
+  const isDisabled = !slug;
+
+  // shared button styles (used for both <Link> and fallback <span>)
+  const btnStyle = {
+    display: "inline-block",
+    padding: "0.8rem 1.6rem",
+    background: "#D87D4A",
+    color: "#fff",
+    borderRadius: 4,
+    textDecoration: "none",
+    textTransform: "uppercase",
+    fontWeight: 600,
+    letterSpacing: 1,
+    cursor: isDisabled ? "not-allowed" : "pointer",
+    opacity: isDisabled ? 0.6 : 1,
+  };
+
   return (
     <section style={{ padding: "3rem 1.5rem" }}>
       <div
@@ -18,7 +38,7 @@ export default function ProductRow({
           alignItems: "center",
         }}
       >
-        {/* Image */}
+        {/* IMAGE */}
         <div style={{ order: reverse ? 2 : 1 }}>
           <div
             style={{
@@ -34,24 +54,44 @@ export default function ProductRow({
           </div>
         </div>
 
-        {/* Text */}
+        {/* TEXT CONTENT */}
         <div style={{ order: reverse ? 1 : 2 }}>
-          {badge && <p style={{ letterSpacing: 8, color: "#D87D4A", margin: 0 }}>{badge}</p>}
-          <h2 style={{ margin: "12px 0 16px", lineHeight: 1.1 }}>{title}</h2>
-          <p style={{ color: "#6b6b6b", marginBottom: 16 }}>{description}</p>
-          <button
-            onClick={onClick}
+          {badge && (
+            <p
+              style={{
+                letterSpacing: 8,
+                color: "#D87D4A",
+                textTransform: "uppercase",
+                fontWeight: 600,
+                marginBottom: 8,
+              }}
+            >
+              {badge}
+            </p>
+          )}
+
+          <h2
             style={{
-              padding: "0.7rem 1.4rem",
-              background: "#D87D4A",
-              color: "#fff",
-              border: 0,
-              borderRadius: 4,
-              letterSpacing: 1,
+              margin: "12px 0 16px",
+              lineHeight: 1.2,
+              textTransform: "uppercase",
             }}
           >
-            SEE PRODUCT
-          </button>
+            {title}
+          </h2>
+
+          <p style={{ color: "#6b6b6b", marginBottom: 24 }}>{description}</p>
+
+          {/* CTA (Link styled as a button). If no slug, show a disabled-looking span */}
+          {isDisabled ? (
+            <span style={btnStyle} aria-disabled="true">
+              See Product
+            </span>
+          ) : (
+            <Link to={`/product/${slug}`} style={btnStyle}>
+              See Product
+            </Link>
+          )}
         </div>
       </div>
     </section>

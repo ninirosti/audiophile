@@ -1,13 +1,6 @@
-// src/components/ProductHighlight.jsx
 import { Link } from "react-router-dom";
 
-export default function ProductHighlight({
-  title,
-  description,
-  bg = "#fef1e8",
-  image,
-  slug, // ← add this so the CTA knows where to go
-}) {
+export default function ProductHighlight({ title, description, bg = "#fef1e8", image, slug }) {
   return (
     <section
       style={{
@@ -24,8 +17,8 @@ export default function ProductHighlight({
         <h2 style={{ marginBottom: 8 }}>{title}</h2>
         <p style={{ marginBottom: 12 }}>{description}</p>
 
-        {/* CTA links to /product/:slug */}
-        <Link to={slug ? `/product/${slug}` : "#"} style={{ textDecoration: "none" }}>
+        {/* 👇 navigate to /product/:slug */}
+        <Link to={`/product/${slug}`} style={{ textDecoration: "none" }}>
           <button
             style={{
               padding: "0.6rem 1rem",
@@ -35,16 +28,13 @@ export default function ProductHighlight({
               borderRadius: 6,
               cursor: "pointer",
             }}
-            disabled={!slug}
-            aria-disabled={!slug}
-            title={slug ? "See product" : "No product link"}
           >
             See Product
           </button>
         </Link>
       </div>
 
-      {image && <img src={image} alt={title} style={{ width: 200, borderRadius: 8, display: "block" }} />}
+      {image && <img src={image} alt={title} style={{ width: 200, borderRadius: 8, pointerEvents: "none" }} />}
     </section>
   );
 }
